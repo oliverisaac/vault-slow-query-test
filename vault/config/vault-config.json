@@ -1,0 +1,21 @@
+{
+    "backend": {
+        "consul": {
+            "address": "consul:8500",
+            "path": "vault/"
+        }
+    },
+    "listener": {
+        "tcp":{
+            "address": "0.0.0.0:8200",
+            "tls_key_file": "/vault/tls/key.pem",
+            "tls_cert_file": "/vault/tls/cert.pem",
+            "tls_cipher_suites": "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305",
+            "tls_disable": false,
+            "tls_min_version": "tls12",
+            "tls_prefer_server_cipher_suites": true,
+                  "max_request_duration": "90s"
+        }
+    },
+    "ui": true
+}

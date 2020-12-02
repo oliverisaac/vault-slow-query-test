@@ -1,0 +1,39 @@
+version: '3.6'
+
+services:
+  postgresql:
+    image: 'docker.io/bitnami/postgresql:11-debian-10'
+    ports:
+      - '5432:5432'
+    environment:
+      - 'ALLOW_EMPTY_PASSWORD=yes'
+  mysql:
+    image: 'docker.io/bitnami/mysql:8.0-debian-10'
+    ports:
+      - '3306:3306'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+    healthcheck:
+      test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
+      interval: 15s
+      timeout: 5s
+      retries: 6
+  vault:
+    image: vault:1.5.3
+    ports:
+      - '8200:8200'
+    volumes:
+      - ./vault/config:/vault/config
+      - ./vault/tls:/vault/tls
+    entrypoint: /bin/vault server -config=/vault/config/vault-config.json
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+      - DONOTUSE_VAULT_DEV_ROOT_TOKEN_ID=UojGUUfctaEREXlySKh1naCD
+    cap_add:
+      - IPC_LOCK
+  consul:
+    image: consul:1.9.0
+    ports:
+      - 8500:8500
+    entrypoint: /bin/consul agent -server -bind 0.0.0.0 -client 0.0.0.0 -dev -ui
